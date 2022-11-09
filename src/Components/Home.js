@@ -11,7 +11,7 @@ import loadingif from '../images/loading-32.gif'
 import {Link,Route,Switch,BrowserRouter,Routes} from 'react-router-dom'
 
 function App(){
-    const url="http://localhost:3030/"
+    const url="http://192.168.1.57:3030/"
     const [tickets,setTicket]=useState()
    
         const fetchApi= async()=>{
@@ -30,7 +30,7 @@ function App(){
 
     
 
-const icono_flecha_media= <img src={flecha_media} className="icono" />
+const icono_flecha_media= <img src={flecha_media} className="icono_flechamedia" />
 const icono_flecha_baja= <img src={flecha_baja} className="icono" />
 const icono_flecha_alta= <img src={flecha_alta} className="icono_flechaalta" />
 const icono_estrella= <img src={estrella} className="icono_lente" />
@@ -100,16 +100,24 @@ const horas_mesa =[
                             </div>
                                                   
                         </div>
+			
                         </div>
                     </ul>
-                })}                            
+                })} 
+                <div className='container_volver'>                           
             <h2 className='volver'>
                 <Link to="/semanaAnterior"  className='volverlink'>Semana Anterior</Link>
-                    </h2>                
-                        
+                    </h2> 
+                    <h2 className='volver'>
+                <Link to="/Sync"  className='volverlink'>No Sync</Link>
+                    </h2>                 
+                </div>       
             </div> 
 
         </div>
+	<div>
+			
+	</div>
     </div>        
     )
 }

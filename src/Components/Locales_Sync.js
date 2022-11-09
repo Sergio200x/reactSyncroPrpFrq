@@ -11,22 +11,50 @@ import loadingif from '../images/loading-32.gif'
 import {Link,Route,Switch,BrowserRouter,Routes} from 'react-router-dom'
 
 function Sync(){
-    const url="http://localhost:3031/synclocales"
-    const [syncro,setSync]=useState()
-   
-        const fetchApi= async()=>{
-            const response = await fetch(url)
-            
-            const responseJSON= await response.json()
-            setSync(responseJSON)  
-                
-    }   
-    useEffect(()=>{
-        fetchApi()
-    },[])
-     
-   
+    
+    const [syncro, setSync]= useState([])    
+    useEffect (() => {        
+            fetch("http://192.168.1.57:3031/synclocales")
+            .then(response => response.json())
+            .then( data =>{ setSync(data.data)} )
+            .catch(error =>console.error(error))
+            }, [])    
+    const [syncroGMG, setSyncGMG]= useState([])    
+            useEffect (() => {        
+                    fetch("http://192.168.1.57:3032/synclocales")
+                    .then(response => response.json())
+                    .then( data =>{ setSyncGMG(data.data)} )
+                    .catch(error =>console.error(error))
+                    }, []) 
+    const [syncroUY, setSyncUY]= useState([])    
+            useEffect (() => {        
+                    fetch("http://192.168.1.57:3033/synclocales")
+                    .then(response => response.json())
+                    .then( data =>{ setSyncUY(data.data)} )
+                    .catch(error =>console.error(error))
+                    }, [])                 
+    const [syncroPY, setSyncPY]= useState([])    
+            useEffect (() => {        
+                    fetch("http://192.168.1.57:3034/synclocales")
+                    .then(response => response.json())
+                    .then( data =>{ setSyncPY(data.data)} )
+                    .catch(error =>console.error(error))
+                     }, [])                  
+                    
 
+     let locales=[]
+
+            if(syncro.length>0||syncroGMG.length>0||syncroUY.length>0||syncroPY.length>0)
+            {
+                locales.push(syncro)
+                locales.push(syncroGMG)
+                locales.push(syncroUY)
+                locales.push(syncroPY)
+                
+            }
+            else{
+                locales.push('No hay datos')               
+            } 
 
     
 
@@ -46,37 +74,32 @@ const loading = <img src={loadingif} className="loading"/>
         <div className='principal_container'>         
         
             <h2 className='titulo'>DashBoard Cinet</h2>
-            <div className='container'>
-                <div className='titulos'>
-                <div className='titulo_nombres'><h4 className='titulo_individual'>Local</h4></div>
-                <div className='titulo_numeros'>
-                <div className='titulo_numeros_individual'><h4 className='h4_titulo'> Estado</h4></div>
-                <div className='titulo_numeros_individual'><h4 className='h4_titulo'> Obs</h4></div>
-                              
-                </div>
-                </div>
-                {!syncro?loading:syncro.data.map(function(syncro,i){
-                    if(syncro.Estado_Local==='Desactualizado'){
-                    return <ul key={i} >
-                                            
-                        <div className='list_container'> 
-                        
-                        <div className='numeros'>
-                        <div className='item'><li><strong>{syncro.Codigo_de_local} </strong></li></div>                            
-                        <div className='item'><li><strong>{syncro.Estado_Local} </strong></li></div>
-                        
-                            
-                        </div>
+            <div className='container_syncro'>
+            <div className='titulos_syncro'>
+                <div className='titulo_Nombre_Syncro'><h4>Local</h4></div>
+                <div className='titulo_Nombres_Syncro'><h4>Nombre del local</h4></div>
+                <div className='titulo_Nombre_Syncro'><h4>Horas sin Tansmitir</h4></div>               
+            </div>
+                {Array.from(locales).map(function(syncro,i){ 
+                    return      (
+                    Array.from(syncro).map(function(syncro1,i){                   
+                    return <ul key={i} >                                            
+                        <div className='list_container_syncro'> 
+                            <div className='item_nombre_syncro'><li><strong>{syncro1.Codigo_de_local}</strong> </li></div>
+                            <div className='item_nombres_syncro'><li><strong>{syncro1.Nombre_local}</strong> </li></div>
+                            <div className='item_nombre_syncro'><li><strong>{syncro1.horas} </strong></li></div>                       
                         </div>
                     </ul>
-               } })}                            
-            <h2 className='volver'>
-                <Link to="/Sync"  className='volverlink'>Semana Anterior</Link>
-                    </h2>                
+                })    )
+            })}                      
+              <h2 className='volver'>
+                <Link to="/"  className='volverlink_sync'>Volver al Dash Principal</Link>
+                    </h2>            
                         
             </div> 
-
+	
         </div>
+	
     </div>        
     )
 }
